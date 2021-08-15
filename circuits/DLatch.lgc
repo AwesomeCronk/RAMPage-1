@@ -1,0 +1,9 @@
+$pins in w > out
+
+not in > in1
+and w in > set
+and w in1 > reset
+
+or set state > out
+not reset > _reset
+and out _reset > state

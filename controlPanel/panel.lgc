@@ -1,0 +1,76 @@
+// Control panel:
+// Q-I for 8-bit input
+// O to latch values
+// P to enable/disable set
+// 1-0 to select set
+// Sets:
+//   Main bus
+//   Paging bus
+//   Control Lines
+
+$include set.lgc > set
+$include ../circuits/SRLatch.lgc > SR
+
+// Set outputs
+$pins > out00 out01 out02 out03 out04 out05 out06 out07 enable0
+$pins > out08 out09 out0A out0B out0C out0D out0E out0F enable1
+
+// Switches
+switch > c0 & 'q'; switch > c1 & 'w'; switch > c2 & 'e'; switch > c3 & 'r'
+switch > c4 & 't'; switch > c5 & 'y'; switch > c6 & 'u'; switch > c7 & 'i'
+
+button > enable & 'o'
+button > write & 'p'
+button > select0 & '1'
+button > select1 & '2'
+button > select2 & '3'
+
+//Set selection
+or select1 select2 > reset0
+or select0 select2 > reset1
+or select0 select1 > reset2
+SR select0 reset0 > writeEnable0 _writeEnable0
+SR select1 reset1 > writeEnable1 _writeEnable1
+SR select2 reset2 > writeEnable2 _writeEnable2
+and write writeEnable0 > write0
+and write writeEnable1 > write1
+and write writeEnable2 > write2
+and enable writeEnable0 > enable0
+and enable writeEnable1 > enable1
+and enable writeEnable2 > enable2
+
+// Sets
+set c0 c1 c2 c3 c4 c5 c6 c7 write0 enable0 > out00 out01 out02 out03 out04 out05 out06 out07 setEnable0
+set c0 c1 c2 c3 c4 c5 c6 c7 write1 enable1 > out08 out09 out0A out0B out0C out0D out0E out0F setEnable1
+
+led c0     & 20 255 20  2 4
+led c1     & 20 255 20  3 4
+led c2     & 20 255 20  4 4
+led c3     & 20 255 20  5 4
+led c4     & 20 255 20  6 4
+led c5     & 20 255 20  7 4
+led c6     & 20 255 20  8 4
+led c7     & 20 255 20  9 4
+led enable & 20 255 20 11 4
+
+led writeEnable0 & 255 255 20  0 6
+led out00   & 255 20 20  2 6
+led out01   & 255 20 20  3 6
+led out02   & 255 20 20  4 6
+led out03   & 255 20 20  5 6
+led out04   & 255 20 20  6 6
+led out05   & 255 20 20  7 6
+led out06   & 255 20 20  8 6
+led out07   & 255 20 20  9 6
+led setEnable0 & 255 20 20 11 6
+
+led writeEnable1 & 255 255 20  0 8
+led out08   & 255 20 20  2 8
+led out09   & 255 20 20  3 8
+led out0A   & 255 20 20  4 8
+led out0B   & 255 20 20  5 8
+led out0C   & 255 20 20  6 8
+led out0D   & 255 20 20  7 8
+led out0E   & 255 20 20  8 8
+led out0F   & 255 20 20  9 8
+led setEnable1 & 255 20 20 11 8

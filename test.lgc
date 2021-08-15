@@ -1,0 +1,11 @@
+$include circuits/SRLatch.lgc > latch
+
+button > set   & 's'
+button > reset & 'r'
+
+latch set reset > data _data
+
+led set   & 255  20 20  5 5
+led reset & 255   0  0  6 5
+led data  &  20 255 20  5 6
+led _data &   0 255  0  6 6

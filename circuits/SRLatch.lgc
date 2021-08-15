@@ -1,0 +1,3 @@
+$pins s r > q _q
+nor s q > _q
+nor r _q > q

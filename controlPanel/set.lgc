@@ -1,0 +1,11 @@
+$include ../circuits/register8.lgc > reg8
+$include ../circuits/DLatch.lgc > latch
+
+$pins in0 in1 in2 in3 in4 in5 in6 in7 w eIn > o0 o1 o2 o3 o4 o5 o6 o7 eOut
+
+reg8 in0 in1 in2 in3 in4 in5 in6 in7 w > o0 o1 o2 o3 o4 o5 o6 o7
+
+not eIn > _eIn
+latch eOut _eIn > e
+not e > _e
+latch _e eIn > eOut

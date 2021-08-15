@@ -1,0 +1,22 @@
+$include memory.py > memory
+
+// Main bus
+bus bus0; bus bus1; bus bus2; bus bus3
+bus bus4; bus bus5; bus bus6; bus bus7
+
+// Paging bus
+bus page0; bus page1; bus page2; bus page3; bus page4
+
+// Control lines:
+// memIn
+// memOut
+// regIn
+// regOut
+// pgmCtrIn
+// pgmCtrInc
+// InsRegIn
+
+
+
+// Memory
+memory 
