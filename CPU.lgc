@@ -1,5 +1,6 @@
 $include memory.py > memory
 $include circuits/register8.lgc > reg8
+$include circuits/registerB.lgc > regB
 $include controlPanel/panel.lgc > controlPanel
 
 
@@ -66,3 +67,6 @@ tristate memDataOut4 controlMemDataOut > bus4; tristate memDataOut5 controlMemDa
 
 
 //// ALU ////
+
+//// Control logic ////
+// Instruction register
