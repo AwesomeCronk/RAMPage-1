@@ -1,4 +1,5 @@
-$include memory.py > memory
+$include memory/memory.py > mem
+$include memory/fileMemory.py > fileMem
 $include circuits/register8.lgc > reg8
 $include circuits/registerB.lgc > regB
 $include controlPanel/panel.lgc > controlPanel
@@ -23,7 +24,7 @@ bus > page0; bus > page1; bus > page2; bus > page3; bus > page4
 
 
 //// Control panel ////
-controlPanel > panelOut00 panelOut01 panelOut02 panelOut03 panelOut04 panelOut05 panelOut06 panelOut07 panelEnable0 panelOut08 panelOut09 panelOut0A panelOut0B panelOut0C panelOut0D panelOut0E panelOut0F panelEnable1 panelOut10 panelOut11 panelOut12 panelOut13 panelOut14 panelOut15 panelOut16 panelOut17 panelEnable2
+controlPanel > panelOut00 panelOut01 panelOut02 panelOut03 panelOut04 panelOut05 panelOut06 panelOut07 panelEnable0 panelOut08 panelOut09 panelOut0A panelOut0B panelOut0C panelOut0D panelOut0E panelOut0F panelEnable1 panelOut10 panelOut11 panelOut12 panelOut13 panelOut14 panelOut15 panelOut16 panelOut17 panelEnable2 panelOut18 panelOut19 panelOut1A panelOut1B panelOut1C panelOut1D panelOut1E panelOut1F panelEnable3
 
 // Main bus
 tristate panelOut00 panelEnable0 > bus0
@@ -43,22 +44,31 @@ tristate panelOut0E panelEnable1 > page3
 tristate panelOut0F panelEnable1 > page4
 
 // Control lines:
-// Replace `controlXXXX` with `panelControlXXXX` when control lines are implemented, then select between them based on panelEnable
+// Replace `controlXXXX` with `panelControlXXXX` when control logic is implemented, then select between them based on panelEnable
 and panelEnable2 panelOut10 > controlMemAddrIn
 and panelEnable2 panelOut11 > controlMemDataIn
 and panelEnable2 panelOut12 > controlMemDataOut
 and panelEnable2 panelOut13 > controlRegIn
 and panelEnable2 panelOut14 > controlRegOut
-and panelEnable2 panelOut15 > controlPgmCtrIn
-and panelEnable2 panelOut16 > controlPgmCtrInc
-and panelEnable2 panelOut17 > controlInsRegIn
+and panelEnable2 panelOut15 > controlInsRegIn
+and panelEnable2 panelOut16 > controlInsRegOut
+// and panelEnable2 panelOut17 > 
 
+// and panelEnable3 panelOut18 > 
+// and panelEnable3 panelOut19 > 
+// and panelEnable3 panelOut1A > 
+// and panelEnable3 panelOut1B > 
+// and panelEnable3 panelOut1C > 
+// and panelEnable3 panelOut1D > 
+// and panelEnable3 panelOut1E > 
+// and panelEnable3 panelOut1F > 
 
 //// Memory ////
 reg8 \low \low bus2 bus3 bus4 bus5 bus6 bus7 controlMemAddrIn > null0 null1 memAddr0 memAddr1 memAddr2 memAddr3 memAddr4 memAddr5
 reg8 bus0 bus1 bus2 bus3 bus4 bus5 bus6 bus7 controlMemDataIn > memDataIn0 memDataIn1 memDataIn2 memDataIn3 memDataIn4 memDataIn5 memDataIn6 memDataIn7
 
-memory page0 page1 page2 page3 page4 memAddr0 memAddr1 memAddr2 memAddr3 memAddr4 memAddr5  memDataIn0 memDataIn1 memDataIn2 memDataIn3 memDataIn4 memDataIn5 memDataIn6 memDataIn7  controlMemDataIn > memDataOut0 memDataOut1 memDataOut2 memDataOut3 memDataOut4 memDataOut5 memDataOut6 memDataOut7
+mem page0 page1 page2 page3 page4 memAddr0 memAddr1 memAddr2 memAddr3 memAddr4 memAddr5  memDataIn0 memDataIn1 memDataIn2 memDataIn3 memDataIn4 memDataIn5 memDataIn6 memDataIn7  controlMemDataIn > memDataOut0 memDataOut1 memDataOut2 memDataOut3 memDataOut4 memDataOut5 memDataOut6 memDataOut7
+// fileMem page0 page1 page2 page3 page4 memAddr0 memAddr1 memAddr2 memAddr3 memAddr4 memAddr5  memDataIn0 memDataIn1 memDataIn2 memDataIn3 memDataIn4 memDataIn5 memDataIn6 memDataIn7  controlMemDataIn > memDataOut0 memDataOut1 memDataOut2 memDataOut3 memDataOut4 memDataOut5 memDataOut6 memDataOut7 & ROM.bin
 tristate memDataOut0 controlMemDataOut > bus0; tristate memDataOut1 controlMemDataOut > bus1; tristate memDataOut2 controlMemDataOut > bus2; tristate memDataOut3 controlMemDataOut > bus3
 tristate memDataOut4 controlMemDataOut > bus4; tristate memDataOut5 controlMemDataOut > bus5; tristate memDataOut6 controlMemDataOut > bus6; tristate memDataOut7 controlMemDataOut > bus7
 
@@ -70,3 +80,16 @@ tristate memDataOut4 controlMemDataOut > bus4; tristate memDataOut5 controlMemDa
 
 //// Control logic ////
 // Instruction register
+regB page0 page1 page2 page3 page4 bus2 bus3 bus4 bus5 bus6 bus7 controlInsRegIn > insRegOut0 insRegOut1 insRegOut2 insRegOut3 insRegOut4 insRegOut5 insRegOut6 insRegOut7 insRegOut8 insRegOut9 insRegOutA
+
+tristate insRegOut0 controlInsRegOut > page0
+tristate insRegOut1 controlInsRegOut > page1
+tristate insRegOut2 controlInsRegOut > page2
+tristate insRegOut3 controlInsRegOut > page3
+tristate insRegOut4 controlInsRegOut > page4
+tristate insRegOut5 controlInsRegOut > bus2
+tristate insRegOut6 controlInsRegOut > bus3
+tristate insRegOut7 controlInsRegOut > bus4
+tristate insRegOut8 controlInsRegOut > bus5
+tristate insRegOut9 controlInsRegOut > bus6
+tristate insRegOutA controlInsRegOut > bus7

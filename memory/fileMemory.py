@@ -1,8 +1,18 @@
 class pyElement(element):
     def __init__(self, *args):
+        self.args = args
         element.__init__(self)
 
         self.data = ['00000000'] * (2 ** 11)
+        with open(self.args[0], 'rb') as file:
+            fileData = file.read()
+
+        for i in range(2 ** 11):
+            try:
+                self.data[i] = bin(fileData[i])[2:].zfill(8)
+            except IndexError:
+                break
+
         self.addrInputs = ['a{}'.format(i) for i in range(11)]
         self.dataInputs = ['i{}'.format(i) for i in range(8)]
         self.dataOutputs = ['o{}'.format(i) for i in range(8)]
