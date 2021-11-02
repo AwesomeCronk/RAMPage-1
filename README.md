@@ -1,13 +1,16 @@
-Bus width: 8b
-Address width: 11b
+Bus width: `8b`
+Address width: `11b`
 
-Instructions:
+### Instructions:
+```
 00 - SET [mode]
 01 - CPR [addr]
 10 - CPM [addr]
 11 - JMP [addr]
+```
 
-[mode] can be:
+### `[mode]` can be:
+```
 000xxx - ALU mode
    000 - integer add
    001 - integer subtract
@@ -33,19 +36,20 @@ Instructions:
 01xxxx - Register ID
   0000 - GP A
   0001 - GP B
-  0010 - ALU A
-  0011 - ALU B
-  0100 - ALU result
-  0101 - Flags (read-only)
-  0110 - GPIO direction A
-  0111 - GPIO direction B
-  1000 - GPIO A
-  1001 - GPIO B
-  1010 - I2C A
-  1011 - I2C B
-  1100 - UART A
-  1101 - UART B
-  1110 - TI-Link A
-  1111 - TI-Link B
+  0010 - GP B
+  0011 - GP C
+  0100 - GP D
+  0101 - GP E
+  0110 - ALU A
+  0111 - ALU B
+  1000 - ALU result
+  1001 - Flags (read-only)
+  1010 - GPIO direction A
+  1011 - GPIO direction B
+  1100 - GPIO A
+  1101 - GPIO B
+  1110 - I2C A
+  1111 - I2C B
 
 1xxxxx - Memory page ID
+```
