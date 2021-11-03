@@ -1,5 +1,6 @@
-Bus width: `8b`
-Address width: `11b`
+### Specs:
+* Bus width: `8b`
+* Address width: `11b`
 
 ### Instructions:
 ```
@@ -39,15 +40,15 @@ Address width: `11b`
   0010 - GP B
   0011 - GP C
   0100 - GP D
-  0101 - GP E
-  0110 - ALU A
-  0111 - ALU B
-  1000 - ALU result
-  1001 - Flags (read-only)
-  1010 - GPIO direction A
+  0101 - ALU A
+  0110 - ALU B
+  0111 - ALU result
+  1000 - Flags (read-only)
+  1001 - GPIO direction A
+  1010 - GPIO A 
   1011 - GPIO direction B
-  1100 - GPIO A
-  1101 - GPIO B
+  1100 - GPIO B
+  1101 - Parallel port
   1110 - I2C A
   1111 - I2C B
 

@@ -17,18 +17,25 @@ class pyElement(element):
             self.addOutput(pin(name))
 
     def update(self):
-        element.update(self)
-
         addr = '0b'
+        inputsOK = True
         for name in self.addrInputs:
-            addr += str(self.inputs[name].value)
-        addr = int(addr, base=2)
+            value = self.inputs[name].value
+            if value in (0, 1):
+                addr += str(value)
+            else:
+                inputsOK = False
+                break
 
-        if self.inputs['w'].value:
+        if not self.inputs['w'].value in (0, 1):
+            inputsOK = False
+        elif self.inputs['w'].value:
             val = ''
             for name in self.dataInputs:
                 val += str(self.inputs[name].value)
             self.data[addr] = val
 
-        for i, name in enumerate(self.dataOutputs):
-            self.outputs[name].set(int(self.data[addr][i]))
+        if inputsOK:
+            addr = int(addr, base=2)
+            for i, name in enumerate(self.dataOutputs):
+                self.outputs[name].set(int(self.data[addr][i]))

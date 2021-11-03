@@ -1,25 +1,49 @@
 $include memory/memory.py > mem
 $include memory/fileMemory.py > fileMem
-$include circuits/register08.lgc > reg08
-$include circuits/register11.lgc > reg11
-
+$include registers/register08.lgc > reg08
+$include registers/register11.lgc > reg11
+$include indicators/ledBar8.py > ledBar8
+$include indicators/ledBar5.py > ledBar5
+$include enc_dec_mux_dem/multiplexer3.lgc > mux3
+$include latches/DLatch.lgc > dLatch
 
 //// Main bus ////
-ledBar bus[0..7] & 255 20 20  20 5
+label \high & 255 255 255  0 0 0  70 1  "Main Bus" fg
+ledBar8 bus[0..7] & 255 20 20  70 2
+
+switch > busInterface0 & '1'
+switch > busInterface1 & '2'
+switch > busInterface2 & '3'
+switch > busInterface3 & '4'
+switch > busInterface4 & '5'
+switch > busInterface5 & '6'
+switch > busInterface6 & '7'
+switch > busInterface7 & '8'
+label \high & 255 255 255  0 0 0  1 14  "Bus Interface (1..8)" fg
+ledBar8 busInterface[0..7] & 250 250 20  1 15
 
 //// Paging bus ////
+label \high & 255 255 255  0 0 0  57 1  "Paging Bus" fg
+ledBar5 page[0..4] & 255 20 20  62 2
 
 //// Memory ////
-reg8 \low \low bus[2..7] controlMemAddrIn > null0 null1 memAddr[0..5]
-reg8 bus[0..7] controlMemDataIn > memDataIn[0..7]
+// Memory uses all 5 bits of paging bus and lower 6 bits of main bus for addressing
+reg08 \low \low bus[2..7] ctrlMemAdrIn > null0 null1 memAddr[0..5]
+reg08 bus[0..7] ctrlMemDtaIn > memDataIn[0..7]
 
-mem page[0..4] memAddr[0..5]]  memDataIn[0..7]  controlMemDataIn > memDataOut[0..7]
-// fileMem page[0..4] memAddr[0..5]]  memDataIn[0..7]  controlMemDataIn > memDataOut[0..7] & ROM.bin
-tristate memDataOut0 controlMemDataOut > bus0; tristate memDataOut1 controlMemDataOut > bus1; tristate memDataOut2 controlMemDataOut > bus2; tristate memDataOut3 controlMemDataOut > bus3
-tristate memDataOut4 controlMemDataOut > bus4; tristate memDataOut5 controlMemDataOut > bus5; tristate memDataOut6 controlMemDataOut > bus6; tristate memDataOut7 controlMemDataOut > bus7
+mem page[0..4] memAddr[0..5]  memDataIn[0..7]  ctrlMemDtaIn > memDataOut[0..7]
+// fileMem page[0..4] memAddr[0..5]]  memDataIn[0..7]  ctrlMemDtaIn > memDataOut[0..7] & ROM.bin
+tristate memDataOut0 ctrlMemDtaOut > bus0
+tristate memDataOut1 ctrlMemDtaOut > bus1
+tristate memDataOut2 ctrlMemDtaOut > bus2
+tristate memDataOut3 ctrlMemDtaOut > bus3
+tristate memDataOut4 ctrlMemDtaOut > bus4
+tristate memDataOut5 ctrlMemDtaOut > bus5
+tristate memDataOut6 ctrlMemDtaOut > bus6
+tristate memDataOut7 ctrlMemDtaOut > bus7
 
 
-//// Registers ////
+//// GP Registers ////
 
 
 //// ALU ////
@@ -28,16 +52,60 @@ tristate memDataOut4 controlMemDataOut > bus4; tristate memDataOut5 controlMemDa
 
 // Instruction register
 // Connects to all 5 bits of paging bus and lower 6 bits of main bus
-regB page[0..4] bus[2..7] controlInsRegIn > insRegOut[00..10]
+reg11 page[0..4] bus[2..7] ctrlInsRegIn > insRegOut[00..10]
 
-tristate insRegOut00 controlInsRegOut > page0
-tristate insRegOut01 controlInsRegOut > page1
-tristate insRegOut02 controlInsRegOut > page2
-tristate insRegOut03 controlInsRegOut > page3
-tristate insRegOut04 controlInsRegOut > page4
-tristate insRegOut05 controlInsRegOut > bus2
-tristate insRegOut06 controlInsRegOut > bus3
-tristate insRegOut07 controlInsRegOut > bus4
-tristate insRegOut08 controlInsRegOut > bus5
-tristate insRegOut09 controlInsRegOut > bus6
-tristate insRegOut10 controlInsRegOut > bus7
+tristate insRegOut00 ctrlInsRegOut > page0
+tristate insRegOut01 ctrlInsRegOut > page1
+tristate insRegOut02 ctrlInsRegOut > page2
+tristate insRegOut03 ctrlInsRegOut > page3
+tristate insRegOut04 ctrlInsRegOut > page4
+tristate insRegOut05 ctrlInsRegOut > bus2
+tristate insRegOut06 ctrlInsRegOut > bus3
+tristate insRegOut07 ctrlInsRegOut > bus4
+tristate insRegOut08 ctrlInsRegOut > bus5
+tristate insRegOut09 ctrlInsRegOut > bus6
+tristate insRegOut10 ctrlInsRegOut > bus7
+
+// Instruction decoder
+// For temporary, this is just a bunch of switches.
+
+switch > ctrlMemAdrIn  & 'q'
+switch > ctrlMemDtaIn  & 'w'
+switch > ctrlMemDtaOut & 'e'
+switch > ctrlInsRegIn  & 'r'
+switch > ctrlInsRegOut & 't'
+switch > ctrlActRegIn  & 'y'
+switch > ctrlActRegOut & 'u'
+switch > ctrlActRegSet & 'i'
+switch > ctrlBusIntMn  & 'o'
+switch > ctrlBusIntPg  & 'p'
+
+label \high & 255 255 255  0 0 0  1 1 "Control Lines:"  fg
+
+label \high & 255 255 255  0 0 0  3  3 "MemAdrIn  (Q)"  fg
+label \high & 255 255 255  0 0 0  3  4 "MemDtaIn  (W)"  fg
+label \high & 255 255 255  0 0 0  3  5 "MemDtaOut (E)"  fg
+label \high & 255 255 255  0 0 0  3  6 "InsRegIn  (R)"  fg
+label \high & 255 255 255  0 0 0  3  7 "InsRegOut (T)"  fg
+label \high & 255 255 255  0 0 0  3  8 "ActRegIn  (Y)"  fg
+label \high & 255 255 255  0 0 0  3  9 "ActRegOut (U)"  fg
+label \high & 255 255 255  0 0 0  3 10 "ActRegSet (I)"  fg
+label \high & 255 255 255  0 0 0  3 11 "BusIntMn  (O)"  fg
+label \high & 255 255 255  0 0 0  3 12 "BusIntPg  (P)"  fg
+
+led ctrlMemAdrIn  & 255 255 20  1  3
+led ctrlMemDtaIn  & 255 255 20  1  4
+led ctrlMemDtaOut & 255 255 20  1  5
+led ctrlInsRegIn  & 255 255 20  1  6
+led ctrlInsRegOut & 255 255 20  1  7
+led ctrlActRegIn  & 255 255 20  1  8
+led ctrlActRegOut & 255 255 20  1  9
+led ctrlActRegSet & 255 255 20  1 10
+led ctrlBusIntMn  & 255 255 20  1 11
+led ctrlBusIntPg  & 255 255 20  1 12
+
+// Register selector
+// Takes the ctrlActReg lines and multiplexes them
+dLatch bus5 ctrlActRegSet > actRegID0
+dLatch bus6 ctrlActRegSet > actRegID1
+dLatch bus7 ctrlActRegSet > actRegID2

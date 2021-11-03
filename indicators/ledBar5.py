@@ -8,7 +8,8 @@ class pyElement(element):
 
         self.widget = widget()
         self.widget.setMode(widget.containerMode)
-        for i in range(8):
+        self.widget.moveTo(vec2(0, 2))
+        for i in range(5):
             self.widget.addWidget(widget())
             self.widget.widgets[i].resize(vec2(1,1))
             self.widget.widgets[i].moveTo(self.pos + vec2(i, 0))

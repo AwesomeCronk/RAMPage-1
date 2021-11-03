@@ -1,6 +1,6 @@
-$include DLatch.lgc > latch
+$include ../latches/DLatch.lgc > latch
 
-$pins in0 in1 in2 in3 in4 in5 in6 in7 w > out0 out1 out2 out3 out4 out5 out6 out7
+$pins in[0..7] w > out[0..7]
 
 latch in0 w > out0
 latch in1 w > out1

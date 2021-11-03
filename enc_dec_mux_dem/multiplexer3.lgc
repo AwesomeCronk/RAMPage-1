@@ -1,0 +1,14 @@
+$include encoder3.ttb > enc3
+
+$pins addr[0..2] dIn > dOut[0..7
+
+enc3 addr[0..2] > select[0..7]
+
+tristate dIn select0 > dOut0
+tristate dIn select1 > dOut1
+tristate dIn select2 > dOut2
+tristate dIn select3 > dOut3
+tristate dIn select4 > dOut4
+tristate dIn select5 > dOut5
+tristate dIn select6 > dOut6
+tristate dIn select7 > dOut7
