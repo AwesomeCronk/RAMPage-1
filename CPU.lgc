@@ -3,9 +3,10 @@ $include memory/fileMemory.py > fileMem
 $include registers/register08.lgc > reg08
 $include registers/register11.lgc > reg11
 $include indicators/ledBar8.py > ledBar8
+$include indicators/ledBar6.py > ledBar6
 $include indicators/ledBar5.py > ledBar5
 $include enc_dec_mux_dem/multiplexer3.lgc > mux3
-$include latches/DLatch.lgc > dLatch
+$include latches/dLatchTemp.py > dLatch
 
 //// Main bus ////
 label \high & 255 255 255  0 0 0  70 1  "Main Bus" fg
@@ -19,28 +20,48 @@ switch > busInterface4 & '5'
 switch > busInterface5 & '6'
 switch > busInterface6 & '7'
 switch > busInterface7 & '8'
-label \high & 255 255 255  0 0 0  1 14  "Bus Interface (1..8)" fg
-ledBar8 busInterface[0..7] & 250 250 20  1 15
+
 
 //// Paging bus ////
+// Bus for upper 5 bits of memory address
 label \high & 255 255 255  0 0 0  57 1  "Paging Bus" fg
 ledBar5 page[0..4] & 255 20 20  62 2
+
+
+//// Page register ////
+// Link between main bus and paging bus, set by user code
+label \high & 255 255 255  0 0 0  30 5  "Page" fg
+ledBar5 actPage[0..4] & 255 20 20  30 6
+
+dLatch bus3 ctrlActPagIn > actPage0
+dLatch bus4 ctrlActPagIn > actPage1
+dLatch bus5 ctrlActPagIn > actPage2
+dLatch bus6 ctrlActPagIn > actPage3
+dLatch bus7 ctrlActPagIn > actPage4
+
+tristate actPage0 ctrlActPagOut > page0
+tristate actPage1 ctrlActPagOut > page1
+tristate actPage2 ctrlActPagOut > page2
+tristate actPage3 ctrlActPagOut > page3
+tristate actPage4 ctrlActPagOut > page4
+
 
 //// Memory ////
 // Memory uses all 5 bits of paging bus and lower 6 bits of main bus for addressing
 reg08 \low \low bus[2..7] ctrlMemAdrIn > null0 null1 memAddr[0..5]
-reg08 bus[0..7] ctrlMemDtaIn > memDataIn[0..7]
+label \high & 255 255 255  0 0 0  36 5 "Address" fg
+ledBar6 memAddr[0..5] & 255 20 20  37 6
 
-mem page[0..4] memAddr[0..5]  memDataIn[0..7]  ctrlMemDtaIn > memDataOut[0..7]
-// fileMem page[0..4] memAddr[0..5]]  memDataIn[0..7]  ctrlMemDtaIn > memDataOut[0..7] & ROM.bin
-tristate memDataOut0 ctrlMemDtaOut > bus0
-tristate memDataOut1 ctrlMemDtaOut > bus1
-tristate memDataOut2 ctrlMemDtaOut > bus2
-tristate memDataOut3 ctrlMemDtaOut > bus3
-tristate memDataOut4 ctrlMemDtaOut > bus4
-tristate memDataOut5 ctrlMemDtaOut > bus5
-tristate memDataOut6 ctrlMemDtaOut > bus6
-tristate memDataOut7 ctrlMemDtaOut > bus7
+mem page[0..4] memAddr[0..5]  bus[0..7]  ctrlMemDtaIn > memDtaOut[0..7]
+// fileMem page[0..4] memAddr[0..5]]  memDtaIn[0..7]  ctrlMemDtaIn > memDtaOut[0..7] & ROM.bin
+tristate memDtaOut0 ctrlMemDtaOut > bus0
+tristate memDtaOut1 ctrlMemDtaOut > bus1
+tristate memDtaOut2 ctrlMemDtaOut > bus2
+tristate memDtaOut3 ctrlMemDtaOut > bus3
+tristate memDtaOut4 ctrlMemDtaOut > bus4
+tristate memDtaOut5 ctrlMemDtaOut > bus5
+tristate memDtaOut6 ctrlMemDtaOut > bus6
+tristate memDtaOut7 ctrlMemDtaOut > bus7
 
 
 //// GP Registers ////
@@ -67,7 +88,8 @@ tristate insRegOut09 ctrlInsRegOut > bus6
 tristate insRegOut10 ctrlInsRegOut > bus7
 
 // Instruction decoder
-// For temporary, this is just a bunch of switches.
+// For temporary, this is just a bunch of switches
+// Rename to "ctrlOverride____" when instruction register is implemented and tristate them
 
 switch > ctrlMemAdrIn  & 'q'
 switch > ctrlMemDtaIn  & 'w'
@@ -79,6 +101,8 @@ switch > ctrlActRegOut & 'u'
 switch > ctrlActRegSet & 'i'
 switch > ctrlBusIntMn  & 'o'
 switch > ctrlBusIntPg  & 'p'
+switch > ctrlActPagIn  & 'a'
+switch > ctrlActPagOut & 's'
 
 label \high & 255 255 255  0 0 0  1 1 "Control Lines:"  fg
 
@@ -92,6 +116,8 @@ label \high & 255 255 255  0 0 0  3  9 "ActRegOut (U)"  fg
 label \high & 255 255 255  0 0 0  3 10 "ActRegSet (I)"  fg
 label \high & 255 255 255  0 0 0  3 11 "BusIntMn  (O)"  fg
 label \high & 255 255 255  0 0 0  3 12 "BusIntPg  (P)"  fg
+label \high & 255 255 255  0 0 0  3 13 "ActPagIn  (A)"  fg
+label \high & 255 255 255  0 0 0  3 14 "ActPagOut (S)"  fg
 
 led ctrlMemAdrIn  & 255 255 20  1  3
 led ctrlMemDtaIn  & 255 255 20  1  4
@@ -103,6 +129,27 @@ led ctrlActRegOut & 255 255 20  1  9
 led ctrlActRegSet & 255 255 20  1 10
 led ctrlBusIntMn  & 255 255 20  1 11
 led ctrlBusIntPg  & 255 255 20  1 12
+led ctrlActPagIn  & 255 255 20  1 13
+led ctrlActPagOut & 255 255 20  1 14
+
+// Bus interface
+label \high & 255 255 255  0 0 0  1 20  "Bus Interface (1..8)" fg
+ledBar8 busInterface[0..7] & 250 250 20  1 21
+
+tristate busInterface0 ctrlBusIntMn > bus0
+tristate busInterface1 ctrlBusIntMn > bus1
+tristate busInterface2 ctrlBusIntMn > bus2
+tristate busInterface3 ctrlBusIntMn > bus3
+tristate busInterface4 ctrlBusIntMn > bus4
+tristate busInterface5 ctrlBusIntMn > bus5
+tristate busInterface6 ctrlBusIntMn > bus6
+tristate busInterface7 ctrlBusIntMn > bus7
+
+tristate busInterface3 ctrlBusIntPg > page0
+tristate busInterface4 ctrlBusIntPg > page1
+tristate busInterface5 ctrlBusIntPg > page2
+tristate busInterface6 ctrlBusIntPg > page3
+tristate busInterface7 ctrlBusIntPg > page4
 
 // Register selector
 // Takes the ctrlActReg lines and multiplexes them

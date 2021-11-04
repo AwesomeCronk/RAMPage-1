@@ -29,13 +29,14 @@ class pyElement(element):
 
         if not self.inputs['w'].value in (0, 1):
             inputsOK = False
-        elif self.inputs['w'].value:
-            val = ''
-            for name in self.dataInputs:
-                val += str(self.inputs[name].value)
-            self.data[addr] = val
-
+        
         if inputsOK:
+            if self.inputs['w'].value:
+                val = ''
+                for name in self.dataInputs:
+                    val += str(self.inputs[name].value)
+                self.data[addr] = val
             addr = int(addr, base=2)
+            
             for i, name in enumerate(self.dataOutputs):
                 self.outputs[name].set(int(self.data[addr][i]))

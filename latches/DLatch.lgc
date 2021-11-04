@@ -1,9 +1,14 @@
 $pins in w > out
 
-not in > in1
+not in > _in
 and w in > set
-and w in1 > reset
+nand w _in > _reset
 
 or set state > out
-not reset > _reset
 and out _reset > state
+
+// led set & 20 255 20  10 5
+// led _reset & 20 255 20  10 6
+
+// led out & 20 255 20  12 5
+// led state & 20 255 20  12 6
