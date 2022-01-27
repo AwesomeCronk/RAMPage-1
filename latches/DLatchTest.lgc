@@ -1,0 +1,10 @@
+$include DLatch.lgc > DLatch
+
+switch > I & i
+button > W & w
+
+DLatch I W > O
+
+led I  & 255  20 20  5 3
+led W  & 255  20 20  5 5
+led O  & 250 250 20  7 3

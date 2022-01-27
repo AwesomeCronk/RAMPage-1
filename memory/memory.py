@@ -1,42 +1,48 @@
+import logging
+log = logging.getLogger('memory.py')
+
 class pyElement(element):
     def __init__(self, *args):
         element.__init__(self)
-        print(args)
 
-        self.data = ['00000000'] * (2 ** 11)
+        self.data = [0] * (2 ** 11)
         self.addrInputs = ['a{}'.format(i) for i in range(11)]
         self.dataInputs = ['i{}'.format(i) for i in range(8)]
         self.dataOutputs = ['o{}'.format(i) for i in range(8)]
 
         for name in self.addrInputs:
             self.addInput(pin(name))
+
         for name in self.dataInputs:
             self.addInput(pin(name))
+        
         self.addInput(pin('w'))
+        
         for name in self.dataOutputs:
             self.addOutput(pin(name))
 
     def update(self):
-        addr = '0b'
-        inputsOK = True
+        addr = 0
         for name in self.addrInputs:
             value = self.inputs[name].value
-            if value in (0, 1):
-                addr += str(value)
-            else:
-                inputsOK = False
-                break
+            # log.debug(value)
+            addr *= 2
+            if value == 1:
+                addr += 1
 
-        if not self.inputs['w'].value in (0, 1):
-            inputsOK = False
+        # log.debug('addr: {}'.format(addr))
         
-        if inputsOK:
-            if self.inputs['w'].value:
-                val = ''
-                for name in self.dataInputs:
-                    val += str(self.inputs[name].value)
-                self.data[addr] = val
-            addr = int(addr, base=2)
-            
-            for i, name in enumerate(self.dataOutputs):
-                self.outputs[name].set(int(self.data[addr][i]))
+        if self.inputs['w'].value == 1:
+            val = 0
+            for name in self.dataInputs:
+                value = self.inputs[name].value
+                val *= 2
+                if value == 1:
+                    val += value
+            self.data[addr] = val
+            # log.debug('wrote {} at {}'.format(val, addr))
+            # log.debug('read back {}'.format(self.data[addr]))
+        
+        bits = [int(i) for i in bin(self.data[addr])[2:].zfill(8)]
+        for i, name in enumerate(self.dataOutputs):
+            self.outputs[name].set(bits[i])

@@ -1,4 +1,4 @@
-$include ../latches/dLatchTemp.py > latch
+$include ../latches/DLatch.lgc > latch
 
 $pins in[0..7] w > out[0..7]
 

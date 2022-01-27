@@ -1,0 +1,58 @@
+$include memory.py > memory
+
+switch > addr00 & q
+switch > addr01 & w
+switch > addr02 & e
+switch > addr03 & r
+switch > addr04 & t
+switch > addr05 & y
+switch > addr06 & u
+switch > addr07 & i
+switch > addr08 & o
+switch > addr09 & p
+switch > addr10 & [
+
+switch > in0 & a
+switch > in1 & s
+switch > in2 & d
+switch > in3 & f
+switch > in4 & g
+switch > in5 & h
+switch > in6 & j
+switch > in7 & k
+
+button > write & Space
+
+led addr00 & 250 250 20  5 5
+led addr01 & 250 250 20  6 5
+led addr02 & 250 250 20  7 5
+led addr03 & 250 250 20  8 5
+led addr04 & 250 250 20  9 5
+led addr05 & 250 250 20  10 5
+led addr06 & 250 250 20  11 5
+led addr07 & 250 250 20  12 5
+led addr08 & 250 250 20  13 5
+led addr09 & 250 250 20  14 5
+led addr10 & 250 250 20  15 5
+
+led in0 & 20 20 250   8 7
+led in1 & 20 20 250   9 7
+led in2 & 20 20 250  10 7
+led in3 & 20 20 250  11 7
+led in4 & 20 20 250  12 7
+led in5 & 20 20 250  13 7
+led in6 & 20 20 250  14 7
+led in7 & 20 20 250  15 7
+
+led out0 & 20 250 20   8 9
+led out1 & 20 250 20   9 9
+led out2 & 20 250 20  10 9
+led out3 & 20 250 20  11 9
+led out4 & 20 250 20  12 9
+led out5 & 20 250 20  13 9
+led out6 & 20 250 20  14 9
+led out7 & 20 250 20  15 9
+
+led write & 250 20 20  6 8
+
+memory addr[00..10] in[0..7] write > out[0..7]

@@ -5,21 +5,22 @@ $include registers/register11.lgc > reg11
 $include indicators/ledBar8.py > ledBar8
 $include indicators/ledBar6.py > ledBar6
 $include indicators/ledBar5.py > ledBar5
-$include enc_dec_mux_dem/multiplexer3.lgc > mux3
-$include latches/dLatchTemp.py > dLatch
+$include enc_dec_mux_dem/demultiplexer4.lgc > demux4
+$include latches/DLatch.lgc > dLatch
+
 
 //// Main bus ////
 label \high & 255 255 255  0 0 0  70 1  "Main Bus" fg
 ledBar8 bus[0..7] & 255 20 20  70 2
 
-switch > busInterface0 & '1'
-switch > busInterface1 & '2'
-switch > busInterface2 & '3'
-switch > busInterface3 & '4'
-switch > busInterface4 & '5'
-switch > busInterface5 & '6'
-switch > busInterface6 & '7'
-switch > busInterface7 & '8'
+switch > busInterface0 & 1
+switch > busInterface1 & 2
+switch > busInterface2 & 3
+switch > busInterface3 & 4
+switch > busInterface4 & 5
+switch > busInterface5 & 6
+switch > busInterface6 & 7
+switch > busInterface7 & 8
 
 
 //// Paging bus ////
@@ -65,6 +66,51 @@ tristate memDtaOut7 ctrlMemDtaOut > bus7
 
 
 //// GP Registers ////
+reg08 bus[0..7] regGP0Write > regGP0Out[0..7]
+tristate regGP0Out0 regGP0Read > actRegOut0
+tristate regGP0Out1 regGP0Read > actRegOut1
+tristate regGP0Out2 regGP0Read > actRegOut2
+tristate regGP0Out3 regGP0Read > actRegOut3
+tristate regGP0Out4 regGP0Read > actRegOut4
+tristate regGP0Out5 regGP0Read > actRegOut5
+tristate regGP0Out6 regGP0Read > actRegOut6
+tristate regGP0Out7 regGP0Read > actRegOut7
+reg08 bus[0..7] regGP1Write > regGP1Out[0..7]
+tristate regGP1Out0 regGP1Read > actRegOut0
+tristate regGP1Out1 regGP1Read > actRegOut1
+tristate regGP1Out2 regGP1Read > actRegOut2
+tristate regGP1Out3 regGP1Read > actRegOut3
+tristate regGP1Out4 regGP1Read > actRegOut4
+tristate regGP1Out5 regGP1Read > actRegOut5
+tristate regGP1Out6 regGP1Read > actRegOut6
+tristate regGP1Out7 regGP1Read > actRegOut7
+reg08 bus[0..7] regGP2Write > regGP2Out[0..7]
+tristate regGP2Out0 regGP2Read > actRegOut0
+tristate regGP2Out1 regGP2Read > actRegOut1
+tristate regGP2Out2 regGP2Read > actRegOut2
+tristate regGP2Out3 regGP2Read > actRegOut3
+tristate regGP2Out4 regGP2Read > actRegOut4
+tristate regGP2Out5 regGP2Read > actRegOut5
+tristate regGP2Out6 regGP2Read > actRegOut6
+tristate regGP2Out7 regGP2Read > actRegOut7
+reg08 bus[0..7] regGP3Write > regGP3Out[0..7]
+tristate regGP3Out0 regGP3Read > actRegOut0
+tristate regGP3Out1 regGP3Read > actRegOut1
+tristate regGP3Out2 regGP3Read > actRegOut2
+tristate regGP3Out3 regGP3Read > actRegOut3
+tristate regGP3Out4 regGP3Read > actRegOut4
+tristate regGP3Out5 regGP3Read > actRegOut5
+tristate regGP3Out6 regGP3Read > actRegOut6
+tristate regGP3Out7 regGP3Read > actRegOut7
+reg08 bus[0..7] regGP4Write > regGP4Out[0..7]
+tristate regGP4Out0 regGP4Read > actRegOut0
+tristate regGP4Out1 regGP4Read > actRegOut1
+tristate regGP4Out2 regGP4Read > actRegOut2
+tristate regGP4Out3 regGP4Read > actRegOut3
+tristate regGP4Out4 regGP4Read > actRegOut4
+tristate regGP4Out5 regGP4Read > actRegOut5
+tristate regGP4Out6 regGP4Read > actRegOut6
+tristate regGP4Out7 regGP4Read > actRegOut7
 
 
 //// ALU ////
@@ -91,18 +137,18 @@ tristate insRegOut10 ctrlInsRegOut > bus7
 // For temporary, this is just a bunch of switches
 // Rename to "ctrlOverride____" when instruction register is implemented and tristate them
 
-switch > ctrlMemAdrIn  & 'q'
-switch > ctrlMemDtaIn  & 'w'
-switch > ctrlMemDtaOut & 'e'
-switch > ctrlInsRegIn  & 'r'
-switch > ctrlInsRegOut & 't'
-switch > ctrlActRegIn  & 'y'
-switch > ctrlActRegOut & 'u'
-switch > ctrlActRegSet & 'i'
-switch > ctrlBusIntMn  & 'o'
-switch > ctrlBusIntPg  & 'p'
-switch > ctrlActPagIn  & 'a'
-switch > ctrlActPagOut & 's'
+switch > ctrlMemAdrIn  & q
+switch > ctrlMemDtaIn  & w
+switch > ctrlMemDtaOut & e
+switch > ctrlInsRegIn  & r
+switch > ctrlInsRegOut & t
+switch > ctrlActRegIn  & y
+switch > ctrlActRegOut & u
+switch > ctrlActRegSel & i
+switch > ctrlBusIntMn  & o
+switch > ctrlBusIntPg  & p
+switch > ctrlActPagIn  & a
+switch > ctrlActPagOut & s
 
 label \high & 255 255 255  0 0 0  1 1 "Control Lines:"  fg
 
@@ -113,7 +159,7 @@ label \high & 255 255 255  0 0 0  3  6 "InsRegIn  (R)"  fg
 label \high & 255 255 255  0 0 0  3  7 "InsRegOut (T)"  fg
 label \high & 255 255 255  0 0 0  3  8 "ActRegIn  (Y)"  fg
 label \high & 255 255 255  0 0 0  3  9 "ActRegOut (U)"  fg
-label \high & 255 255 255  0 0 0  3 10 "ActRegSet (I)"  fg
+label \high & 255 255 255  0 0 0  3 10 "ActRegSel (I)"  fg
 label \high & 255 255 255  0 0 0  3 11 "BusIntMn  (O)"  fg
 label \high & 255 255 255  0 0 0  3 12 "BusIntPg  (P)"  fg
 label \high & 255 255 255  0 0 0  3 13 "ActPagIn  (A)"  fg
@@ -126,7 +172,7 @@ led ctrlInsRegIn  & 255 255 20  1  6
 led ctrlInsRegOut & 255 255 20  1  7
 led ctrlActRegIn  & 255 255 20  1  8
 led ctrlActRegOut & 255 255 20  1  9
-led ctrlActRegSet & 255 255 20  1 10
+led ctrlActRegSel & 255 255 20  1 10
 led ctrlBusIntMn  & 255 255 20  1 11
 led ctrlBusIntPg  & 255 255 20  1 12
 led ctrlActPagIn  & 255 255 20  1 13
@@ -153,6 +199,43 @@ tristate busInterface7 ctrlBusIntPg > page4
 
 // Register selector
 // Takes the ctrlActReg lines and multiplexes them
-dLatch bus5 ctrlActRegSet > actRegID0
-dLatch bus6 ctrlActRegSet > actRegID1
-dLatch bus7 ctrlActRegSet > actRegID2
+dLatch bus4 ctrlActRegSel > actRegID0
+dLatch bus5 ctrlActRegSel > actRegID1
+dLatch bus6 ctrlActRegSel > actRegID2
+dLatch bus7 ctrlActRegSel > actRegID3
+
+demux4 actRegID[0..3] ctrlActRegSel > regGP0Sel regGP1Sel regGP2Sel regGP3Sel regGP4Sel regALUASel regALUBSel regALUResultSel regFlagsSel regGPIOADirSel regGPIOASel regGPIOBDirSel regGPIOBSel regPrlPortSel regI2CASel regI2CBSel
+
+and ctrlActRegIn regGP0Sel > regGP0Write
+and ctrlActRegIn regGP1Sel > regGP1Write
+and ctrlActRegIn regGP2Sel > regGP2Write
+and ctrlActRegIn regGP3Sel > regGP3Write
+and ctrlActRegIn regGP4Sel > regGP4Write
+and ctrlActRegIn regALUASel > regALUAWrite
+and ctrlActRegIn regALUBSel > regALUBWrite
+and ctrlActRegIn regALUResultSel > regALUResultWrite
+and ctrlActRegIn regFlagsSel > regFlagsWrite
+and ctrlActRegIn regGPIOADirSel > regGPIOADirWrite
+and ctrlActRegIn regGPIOASel > regGPIOAWrite
+and ctrlActRegIn regGPIOBDirSel > regGPIOBDirWrite
+and ctrlActRegIn regGPIOBSel > regGPIOBWrite
+and ctrlActRegIn regPrlPortSel > regPrlPortWrite
+and ctrlActRegIn regI2CASel > regI2CAWrite
+and ctrlActRegIn regI2CBSel > regI2CBWrite
+
+and ctrlActRegOut regGP0Sel > regGP0Read
+and ctrlActRegOut regGP1Sel > regGP1Read
+and ctrlActRegOut regGP2Sel > regGP2Read
+and ctrlActRegOut regGP3Sel > regGP3Read
+and ctrlActRegOut regGP4Sel > regGP4Read
+and ctrlActRegOut regALUASel > regALUARead
+and ctrlActRegOut regALUBSel > regALUBRead
+and ctrlActRegOut regALUResultSel > regALUResultRead
+and ctrlActRegOut regFlagsSel > regFlagsRead
+and ctrlActRegOut regGPIOADirSel > regGPIOADirRead
+and ctrlActRegOut regGPIOASel > regGPIOARead
+and ctrlActRegOut regGPIOBDirSel > regGPIOBDirRead
+and ctrlActRegOut regGPIOBSel > regGPIOBRead
+and ctrlActRegOut regPrlPortSel > regPrlPortRead
+and ctrlActRegOut regI2CASel > regI2CARead
+and ctrlActRegOut regI2CBSel > regI2CBRead

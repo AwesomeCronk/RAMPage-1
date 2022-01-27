@@ -34,15 +34,15 @@
     10 - ALU result false
     11 - Relative (*n* steps forward)
 
-01xxxx - Register ID
+01xxxx - Active register
   0000 - GP A
   0001 - GP B
-  0010 - GP B
-  0011 - GP C
-  0100 - GP D
+  0010 - GP C
+  0011 - GP D
+  0100 - GP E
   0101 - ALU A
   0110 - ALU B
-  0111 - ALU result
+  0111 - ALU result (read-only)
   1000 - Flags (read-only)
   1001 - GPIO direction A
   1010 - GPIO A 
@@ -52,5 +52,5 @@
   1110 - I2C A
   1111 - I2C B
 
-1xxxxx - Memory page ID
+1xxxxx - Memory page
 ```
