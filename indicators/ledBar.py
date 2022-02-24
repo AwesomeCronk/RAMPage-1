@@ -1,5 +1,5 @@
 class pyElement(element):
-    def __init__(self, colorR, colorG, colorB, posX, posY):
+    def __init__(self, colorR, colorG, colorB, posX, posY, size):
         element.__init__(self)
 
         self.litColor = (int(colorR), int(colorG), int(colorB))
@@ -9,7 +9,7 @@ class pyElement(element):
         self.widget = widget()
         self.widget.setMode(widget.containerMode)
         self.widget.moveTo(vec2(0, 2))
-        for i in range(5):
+        for i in range(int(size)):
             self.widget.addWidget(widget())
             self.widget.widgets[i].resize(vec2(1,1))
             self.widget.widgets[i].moveTo(self.pos + vec2(i, 0))
