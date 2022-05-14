@@ -1,4 +1,0 @@
-$pins a b c > q
-
-or a b > a_OR_b
-or a_OR_b c > q
