@@ -3,16 +3,16 @@ controlLines = [
     'MA_In',
     'MD_In',
     'MD_Out',
-    'AR_Sel',
     'AR_In',
     'AR_Out',
     'PC_Inc',
     'PC_In',
     'PC_Out',
-    '',
     'SC_Res',
     'IR_In',
     'IR_Out',
+    'Set',
+    '',
     '',
     ''
 ]
@@ -25,8 +25,8 @@ fetch = [
 
 SET = [
     *fetch,
-    [],
-    [],
+    ['IR_Out', 'Set'],
+    ['PC_Inc', 'SC_Res'],
     [],
     [],
     [],
@@ -43,9 +43,9 @@ CPR = [
 ]
 CPM = [
     *fetch,
-    [],
-    [],
-    [],
+    ['IR_Out', 'MA_In'],
+    ['AR_Out', 'MD_In'],
+    ['PC_Inc', 'SC_Res'],
     [],
     [],
     []

@@ -42,7 +42,7 @@
   0100 - GP E
   0101 - ALU A
   0110 - ALU B
-  0111 - ALU result (read-only)
+  0111 - ALU Q (read-only)
   1000 - Flags (read-only)
   1001 - GPIO direction A
   1010 - GPIO A 
