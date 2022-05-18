@@ -23,10 +23,10 @@
    111 - bitwise index
 
 0010xx - Clock mode
-    00 - slow
-    01 - fast
-    10 - single step/halt
-    11 - reset
+    00 - halt
+    01 - step
+    10 - slow
+    11 - fast
 
 0011xx - Jump mode
     00 - Unconditional

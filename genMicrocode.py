@@ -11,9 +11,9 @@ controlLines = [
     'SC_Res',
     'IR_In',
     'IR_Out',
+    'JT_In',
+    'JT_Out',
     'Set',
-    '',
-    '',
     ''
 ]
 steps = 8
@@ -52,8 +52,8 @@ CPM = [
 ]
 JMP = [
     *fetch,
-    [],
-    [],
+    ['IR_Out', 'JT_In'],
+    ['JT_Out', 'PC_In', 'SC_Res'],
     [],
     [],
     [],
